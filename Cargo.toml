@@ -1,0 +1,27 @@
+[package]
+name = "zerosync_verifier"
+version = "0.0.1"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+sandstorm = { git="https://github.com/ZeroSync/sandstorm" }
+layouts = { git="https://github.com/ZeroSync/sandstorm", package = "sandstorm-layouts" }
+binary = { git="https://github.com/ZeroSync/sandstorm", package = "sandstorm-binary" }
+ministark = { git="https://github.com/ZeroSync/ministark", package = "ministark" }
+ark-ff = "0.4"
+ark-serialize = "0.4"
+serde_json = "1.0"
+serde = { version = "1.0.136", features = ["derive"] }
+js-sys = "0.3.57"
+getrandom = { version = "0.2", features = ["js"] }
+num-bigint = "0.4"
+ministark-gpu = { git="https://github.com/ZeroSync/ministark", features = ["arkworks"] }
+
+[build-dependencies]
+ministark-gpu = { version="0.1", git="https://github.com/ZeroSync/ministark", features = [ "arkworks" ] }
+binary = { git="https://github.com/ZeroSync/sandstorm", package = "sandstorm-binary" }
+ark-serialize = "0.4"
+serde_json = "1.0"
+serde = "1.0.136"
