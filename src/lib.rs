@@ -60,10 +60,10 @@ fn aggregate_program() -> &'static CompiledProgram<Fp> {
 }
 
 // Verifies an aggregate program proof
-pub fn verify(public_input_bytes: &Uint8Array, proof_bytes: &Uint8Array) -> Result<ChainState, VerificationError> {
+pub fn verify(public_input_bytes: Vec<u8>, proof_bytes: Vec<u8>) -> Result<ChainState, VerificationError> {
     let air_public_input: AirPublicInput<Fp> =
-        serde_json::from_reader(&*public_input_bytes.to_vec()).unwrap();
-    let proof = Proof::deserialize_compressed(&*proof_bytes.to_vec()).unwrap();
+        serde_json::from_reader(&*public_input_bytes).unwrap();
+    let proof = Proof::deserialize_compressed(&*proof_bytes).unwrap();
     let program = aggregate_program().clone();
     let claim = CairoVerifierClaim::new(program, air_public_input.clone());
 
