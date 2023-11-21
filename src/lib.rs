@@ -1,21 +1,23 @@
 use ark_serialize::CanonicalDeserialize;
 use binary::AirPublicInput;
 use binary::CompiledProgram;
-use js_sys::Uint8Array;
 use layouts::recursive::Fp;
 use ministark::stark::Stark;
 use ministark::Proof;
-use ministark::verifier::VerificationError;
+use ministark::verifier::VerificationError as MinistarkVerificationError;
 use num_bigint::BigUint;
 use sandstorm::claims::recursive::CairoVerifierClaim;
 use serde::{Deserialize, Serialize};
 use std::sync::OnceLock;
+//use snafu::Snafu;
 
 const REQUIRED_SECURITY_BITS: u32 = 80;
 
 const TIMESTAMP_COUNT: usize = 11;
 const HASH_FELT_SIZE: usize = 8;
 const MMR_ROOTS_LEN: usize = 27;
+
+const EXPECTED_PROGRAM_HASH: &str = "1ff70c9838765d61370402a62551f9c00518efbfa098f882b285f0db646943b";
 
 #[derive(Serialize, Deserialize)]
 pub struct ChainState {
@@ -57,6 +59,12 @@ static PROGRAM: OnceLock<CompiledProgram<Fp>> = OnceLock::new();
 fn aggregate_program() -> &'static CompiledProgram<Fp> {
     const BYTES: &[u8] = include_bytes!(concat!(env!("OUT_DIR"), "/program.bin"));
     PROGRAM.get_or_init(|| CompiledProgram::deserialize_compressed(BYTES).unwrap())
+}
+
+#[derive(Debug)]
+pub enum VerificationError {
+    ProgramHash,
+    MinistarkVerificationError(MinistarkVerificationError),
 }
 
 // Verifies an aggregate program proof
@@ -133,8 +141,15 @@ pub fn verify(public_input_bytes: Vec<u8>, proof_bytes: Vec<u8>) -> Result<Chain
         program_hash: format!("{:01x}", buffer[PROGRAM_HASH_INDEX]),
     };
 
+    if chain_state.program_hash != EXPECTED_PROGRAM_HASH {
+        println!("program hash: {}", chain_state.program_hash);
+        print!("expected: {}", EXPECTED_PROGRAM_HASH);
+        return Err(VerificationError::ProgramHash)
+    }
+
+
     return match claim.verify(proof, REQUIRED_SECURITY_BITS) {
         Ok(_) => Ok(chain_state),
-        Err(err) => Err(err),
+        Err(err) => Err(VerificationError::MinistarkVerificationError(err)),
     }
 }

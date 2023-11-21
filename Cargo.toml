@@ -18,6 +18,7 @@ js-sys = "0.3.57"
 getrandom = { version = "0.2", features = ["js"] }
 num-bigint = "0.4"
 ministark-gpu = { git="https://github.com/ZeroSync/ministark", features = ["arkworks"] }
+snafu = "0.7.5"
 
 [build-dependencies]
 ministark-gpu = { version="0.1", git="https://github.com/ZeroSync/ministark", features = [ "arkworks" ] }
