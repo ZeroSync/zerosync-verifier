@@ -23,7 +23,7 @@ fn main() {
 #### Cargo.toml
 ```toml
 [dependencies]
-zerosync_verifier = { path = "../zerosync_verifier" }
+zerosync_verifier = { git = "https://github.com/ZeroSync/zerosync-verifier" }
 serde_json = "1.0"
 reqwest = { version = "0.11.22", features = ["blocking"] }
 ```
