@@ -3,8 +3,8 @@ use binary::AirPublicInput;
 use binary::CompiledProgram;
 use layouts::recursive::Fp;
 use ministark::stark::Stark;
-use ministark::Proof;
 use ministark::verifier::VerificationError as MinistarkVerificationError;
+use ministark::Proof;
 use num_bigint::BigUint;
 use sandstorm::claims::recursive::CairoVerifierClaim;
 use serde::{Deserialize, Serialize};
@@ -17,7 +17,8 @@ const TIMESTAMP_COUNT: usize = 11;
 const HASH_FELT_SIZE: usize = 8;
 const MMR_ROOTS_LEN: usize = 27;
 
-const EXPECTED_PROGRAM_HASH: &str = "1ff70c9838765d61370402a62551f9c00518efbfa098f882b285f0db646943b";
+const EXPECTED_PROGRAM_HASH: &str =
+    "1ff70c9838765d61370402a62551f9c00518efbfa098f882b285f0db646943b";
 
 #[derive(Serialize, Deserialize)]
 pub struct ChainState {
@@ -45,7 +46,7 @@ const CHAIN_STATE_OFFSET: usize = 50;
 
 // const CHAIN_STATE_SIZE: usize = 51;
 
-const BLOCK_HEIGHT_INDEX: usize = CHAIN_STATE_OFFSET + 0;
+const BLOCK_HEIGHT_INDEX: usize = CHAIN_STATE_OFFSET; // CHAIN_STATE_OFFSET + 0
 const BEST_BLOCK_HASH_INDEX: usize = CHAIN_STATE_OFFSET + 1;
 const TOTAL_WORK_INDEX: usize = CHAIN_STATE_OFFSET + 9;
 const CURRENT_TARGET_INDEX: usize = CHAIN_STATE_OFFSET + 10;
